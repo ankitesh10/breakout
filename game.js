@@ -32,7 +32,6 @@ const paddleHeight = 10;
 const paddleWidth = 75;
 let leftPressed = false;
 let rightPressed = false;
-let interval = 0;
 
 let paddleX = (canvas.width - paddleWidth) / 2;
 
@@ -59,9 +58,8 @@ function draw() {
 
       dy = -dy;
     } else {
-      //   alert("Game over");
-      //   document.location.reload();
-      clearInterval(interval);
+      alert("Game over");
+      document.location.reload();
     }
   }
 
@@ -75,6 +73,8 @@ function draw() {
 
   x += dx;
   y += dy;
+
+  requestAnimationFrame(draw);
 }
 
 function drawball() {
@@ -109,7 +109,7 @@ function keyUpHandler(e) {
 }
 
 button.addEventListener("click", function () {
-  interval = setInterval(draw, 10);
+  draw();
 });
 document.addEventListener("keydown", keyDownHandler);
 document.addEventListener("keyup", keyUpHandler);
