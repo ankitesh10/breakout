@@ -51,6 +51,12 @@ function draw() {
     dy = -dy;
   } else if (y + dy > canvas.height - borderRadius) {
     if (x > paddleX && x < paddleX + paddleWidth) {
+      if (x < paddleX + paddleWidth / 2) {
+        dx = -2;
+      } else {
+        dx = 2;
+      }
+
       dy = -dy;
     } else {
       //   alert("Game over");
