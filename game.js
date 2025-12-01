@@ -16,7 +16,7 @@ const bricks = [];
 for (let y = 0; y < brickRowCount; y++) {
   bricks[y] = [];
   for (let x = 0; x < brickColumnCount; x++) {
-    bricks[y][x] = { x: 0, y: 0 };
+    bricks[y][x] = { x: 0, y: 0, status: 1 };
   }
 }
 
@@ -40,6 +40,7 @@ function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawball();
   drawPaddle();
+  detectCollisionWithBricks();
   drawBricks();
 
   if (x + dx < borderRadius || x + dx > canvas.width - borderRadius) {
@@ -52,8 +53,8 @@ function draw() {
     if (x > paddleX && x < paddleX + paddleWidth) {
       dy = -dy;
     } else {
-      alert("Game over");
-      document.location.reload();
+      //   alert("Game over");
+      //   document.location.reload();
       clearInterval(interval);
     }
   }
@@ -108,19 +109,23 @@ document.addEventListener("keydown", keyDownHandler);
 document.addEventListener("keyup", keyUpHandler);
 
 function drawBricks() {
-  for (let col = 0; col < brickRowCount; col++) {
-    for (let row = 0; row < brickColumnCount; row++) {
-      const brickX = row * (brickWidth + brickPadding) + brickOffsetLeft;
-      const brickY = col * (brickHeight + brickPadding) + brickOffsetTop;
+  for (let y = 0; y < brickRowCount; y++) {
+    for (let x = 0; x < brickColumnCount; x++) {
+      const brick = bricks[y][x];
 
-      bricks[col][row].x = brickX;
-      bricks[col][row].y = brickY;
+      if (brick.status) {
+        const brickX = x * (brickWidth + brickPadding) + brickOffsetLeft;
+        const brickY = y * (brickHeight + brickPadding) + brickOffsetTop;
 
-      ctx.beginPath();
-      ctx.rect(brickX, brickY, brickWidth, brickHeight);
-      ctx.fillStyle = "#0095DD";
-      ctx.fill();
-      ctx.closePath();
+        brick.x = brickX;
+        brick.y = brickY;
+
+        ctx.beginPath();
+        ctx.rect(brickX, brickY, brickWidth, brickHeight);
+        ctx.fillStyle = "#0095DD";
+        ctx.fill();
+        ctx.closePath();
+      }
     }
 
     console.log("bricks", bricks);
@@ -128,4 +133,24 @@ function drawBricks() {
 
   ctx.beginPath();
   ctx.rect(brickOffsetLeft, brickOffsetTop, brickWidth, brickHeight);
+}
+
+function detectCollisionWithBricks() {
+  for (let brickY = 0; brickY < brickRowCount; brickY++) {
+    for (let brickX = 0; brickX < brickColumnCount; brickX++) {
+      const brick = bricks[brickY][brickX];
+
+      if (brick.status) {
+        if (
+          x > brick.x &&
+          x < brick.x + brickWidth &&
+          y > brick.y &&
+          y < brick.y + brickHeight
+        ) {
+          dy = -dy;
+          brick.status = 0;
+        }
+      }
+    }
+  }
 }
