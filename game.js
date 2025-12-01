@@ -13,10 +13,10 @@ const brickOffsetLeft = 30;
 const bricks = [];
 
 // fill bricks array
-for (let c = 0; c < bricks; c++) {
-  bricks[c] = [];
-  for (let r = 0; r < brickRowCount; r++) {
-    bricks[c][r] = { x: 0, y: 0 };
+for (let y = 0; y < brickRowCount; y++) {
+  bricks[y] = [];
+  for (let x = 0; x < brickColumnCount; x++) {
+    bricks[y][x] = { x: 0, y: 0 };
   }
 }
 
@@ -52,8 +52,8 @@ function draw() {
     if (x > paddleX && x < paddleX + paddleWidth) {
       dy = -dy;
     } else {
-      //   alert("Game over");
-      //   document.location.reload();
+      alert("Game over");
+      document.location.reload();
       clearInterval(interval);
     }
   }
@@ -108,10 +108,10 @@ document.addEventListener("keydown", keyDownHandler);
 document.addEventListener("keyup", keyUpHandler);
 
 function drawBricks() {
-  for (let col = 0; col < brickColumnCount; col++) {
-    for (let row = 0; row < brickRowCount; row++) {
-      const brickX = col * (brickWidth + brickPadding) + brickOffsetLeft;
-      const brickY = row * (brickHeight + brickPadding) + brickOffsetTop;
+  for (let col = 0; col < brickRowCount; col++) {
+    for (let row = 0; row < brickColumnCount; row++) {
+      const brickX = row * (brickWidth + brickPadding) + brickOffsetLeft;
+      const brickY = col * (brickHeight + brickPadding) + brickOffsetTop;
 
       bricks[col][row].x = brickX;
       bricks[col][row].y = brickY;
